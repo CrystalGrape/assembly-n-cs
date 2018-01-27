@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<operators>
+	<operator>
+		<name>show</name>
+		<value>0</value>
+		<dll>plugins/asn.Runtime.Plugins.show.dll</dll>
+	</operator>
+</operators>
