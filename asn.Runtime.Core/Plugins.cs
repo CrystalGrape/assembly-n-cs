@@ -58,6 +58,8 @@ namespace asn.Runtime.Core
 
         public int GetOptCode(string code)
         {
+            if (!OperatorMap.ContainsKey(code))
+                return -1;
             return OperatorMap[code];
         }
 

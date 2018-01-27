@@ -64,6 +64,8 @@ namespace asn.Runtime.Core
                 {
                     string sectionName = Codes[i].Substring(8, Codes[i].Length - 8);
                     sectionName = sectionName.Substring(0, sectionName.Length - 1);
+                    if (SectionMap.ContainsKey(sectionName))
+                        throw new VMException(VMFault.DuplicateDefinition, $"重复定义的section,{sectionName}");
                     SectionMap[sectionName] = pc;
                     continue;
                 }
@@ -109,9 +111,12 @@ namespace asn.Runtime.Core
             }
             OperatorLine CodeLine = new OperatorLine();
             CodeLine.opt = optLoader.GetOptCode(OpCode);
+            if (CodeLine.opt == -1)
+                throw new VMException(VMFault.InvalidInstructions, $"无效的指令:{Line}");
 
             for (int i = 0; i < index; i++)
             {
+
                 if (SectionMap.ContainsKey(Args[i]))
                 {
                     CodeLine.args[i] = SectionMap[Args[i]];
@@ -124,51 +129,73 @@ namespace asn.Runtime.Core
                 }
                 else
                 {
-                    CodeLine.args[i] = Convert.ToInt32(Args[i]);
-                    CodeLine.argTypes[i] = 'd';
+                    if (int.TryParse(Args[i], out CodeLine.args[i]))
+                        CodeLine.argTypes[i] = 'd';
+                    else
+                        throw new VMException(VMFault.ArgsError, $"参数错误：{Line}->参数{i + 1}");
                 }
             }
             return CodeLine;
         }
 
+        private List<string> loadModules = new List<string>();
         /// <summary>
         /// 加载模块
         /// </summary>
         /// <param name="OriginalCode"></param>
         /// <param name="moduleName"></param>
-        public void LoadModule(List<string> OriginalCode, string moduleName)
+        public void LoadModule(List<string> OriginalCode, string moduleName, string envPath)
         {
-            string modulePath = moduleName;
-            string envPath;
-            int envPathPos = modulePath.LastIndexOf('.');
-            if (envPathPos == -1)
-                envPath = "";
-            else
-                envPath = moduleName.Substring(0, envPathPos);
-            modulePath = modulePath.Replace('.', '\\');
-            modulePath += ".asn";
+            //不重复加载模块
+            if (loadModules.Contains(moduleName))
+                return;
+            loadModules.Add(moduleName);
 
+            string modulePath = string.Copy(moduleName);
+            int envPathPos = moduleName.LastIndexOf('.');
+            string subDir = "";
+            string mn = modulePath;
+            if (envPathPos != -1)
+            {
+                subDir = modulePath.Substring(0, envPathPos);
+                mn = modulePath.Substring(envPathPos + 1, modulePath.Length - envPathPos - 1);
+            }
+            subDir = subDir.Replace('.', '\\');
+
+            envPath = Path.Combine(envPath, subDir);
+            modulePath = Path.Combine(envPath, $"{mn}.asn");
+
+            if (!File.Exists(modulePath))
+                throw new VMException(VMFault.FileNotFound, $"未找到模块:{moduleName}");
             FileStream fs = File.OpenRead(modulePath);
             StreamReader sr = new StreamReader(fs);
-            while (true)
+            try
             {
-                string line = sr.ReadLine();
-                if (string.IsNullOrEmpty(line))
-                    break;
-                line = line.Trim();
-                line = line.Trim('\t');
-                line = line.Trim('\n');
-                if (line.ToLower().StartsWith("import"))
+                while (true)
                 {
-                    string newModule = line;
-                    newModule = line.Substring(7, line.Length - 7);
-                    newModule = envPath + newModule;
-                    LoadModule(OriginalCode, newModule);
-                    continue;
+                    string line = sr.ReadLine();
+                    if (line == null)
+                        break;
+                    line = line.Trim();
+                    line = line.Trim('\t');
+                    line = line.Trim('\n');
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+                    if (line.ToLower().StartsWith("import"))
+                    {
+                        string newModule = line;
+                        newModule = line.Substring(7, line.Length - 7);
+                        LoadModule(OriginalCode, newModule, envPath);
+                        continue;
+                    }
+                    OriginalCode.Add(line);
                 }
-                OriginalCode.Add(line);
             }
-            sr.Dispose();
+            finally
+            {
+                sr.Dispose();
+                fs.Dispose();
+            }
         }
 
         /// <summary>

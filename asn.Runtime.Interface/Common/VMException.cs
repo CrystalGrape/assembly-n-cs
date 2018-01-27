@@ -9,6 +9,10 @@ namespace asn.Runtime.Interface.Common
     {
         //编译过程错误
         ArgsError,
+        FileNotFound,
+        //无效的指令
+        InvalidInstructions,
+        DuplicateDefinition,
         //运行错误
         InvalidAddr,
         ReadOnly,

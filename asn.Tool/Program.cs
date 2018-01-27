@@ -118,7 +118,7 @@ namespace asn.Tool
                         compiler = new Compiler(optLoader, dummyInsCompiler);
                         vm = new VirtualMachine(optLoader);
                         string arg = cmd.Split(' ')[1];
-                        compiler.LoadModule(codes, $"{currentDir.FullName}\\{arg}");
+                        compiler.LoadModule(codes, arg, currentDir.FullName);
                         vm.Programing(compiler.Compile(codes));
                         vm.Run();
                     }
