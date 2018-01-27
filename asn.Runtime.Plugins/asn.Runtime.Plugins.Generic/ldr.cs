@@ -19,7 +19,12 @@ namespace asn.Runtime.Plugins.Generic
                 memoryAddr = Runtime.Read(args[1]);
             else
                 memoryAddr = args[1];
-            Runtime.Write(args[0], Runtime.Read(memoryAddr));
+
+            int offset = args[2];
+            if (types[2] == 0)
+                offset = Runtime.Read(args[2]);
+
+            Runtime.Write(args[0], Runtime.Read(memoryAddr + offset));
         }
     }
 }

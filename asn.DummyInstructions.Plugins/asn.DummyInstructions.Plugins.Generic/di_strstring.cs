@@ -40,7 +40,7 @@ namespace asn.DummyInstructions.Plugins.Generic
                 if (index == 0)
                     DummyInsName += line.ToCharArray()[i];
                 else if (index >= 3)
-                    throw new VMException(VMFault.ArgsError);
+                    throw new VMException(VMFault.ArgsError, "伪指令di_strstring，只有三个参数");
                 else
                     Args[index - 1] += line.ToCharArray()[i];
             }
@@ -58,31 +58,17 @@ namespace asn.DummyInstructions.Plugins.Generic
             List<string> resultLines = new List<string>();
             if (Args[0].StartsWith("r"))
             {
-                int shift = 0;
-                for (int i = 0; i < Args[1].Length; i++)
+                int i = 0;
+                for (i = 0; i < Args[1].Length; i++)
                 {
-                    if (shift == 4)
-                    {
-                        shift = 0;
-                        resultLines.Add($"mov debug,1");
-                        resultLines.Add($"add {Args[0]},{Args[0]},debug");
-                    }
                     resultLines.Add($"mov debug,{(int)Args[1][i]}");
-                    resultLines.Add($"strb debug,{Args[0]},{shift}");
-                    shift++;
-                }
-                //添加字符串结束字符
-                if (shift == 4)
-                {
-                    shift = 0;
-                    resultLines.Add($"mov debug,1");
-                    resultLines.Add($"add {Args[0]},{Args[0]},debug");
+                    resultLines.Add($"strb debug,{Args[0]},{i}");
                 }
                 resultLines.Add($"mov debug,0");
-                resultLines.Add($"strb debug,{Args[0]},{shift}");
+                resultLines.Add($"strb debug,{Args[0]},{i}");
             }
             else
-                throw new VMException(VMFault.InvalidArgs, "命令di_strstring，参数1必须为寄存器");
+                throw new VMException(VMFault.InvalidArgs, "伪指令di_strstring，参数1必须为寄存器");
 
             return resultLines;
         }

@@ -103,7 +103,7 @@ namespace asn.Runtime.Core
                 if (index == 0)
                     OpCode += Line.ToCharArray()[i];
                 else if (index > 3)
-                    throw new VMException(VMFault.ArgsError);
+                    throw new VMException(VMFault.ArgsError, $"指令的参数最多三个:{Line}");
                 else
                     Args[index - 1] += Line.ToCharArray()[i];
             }

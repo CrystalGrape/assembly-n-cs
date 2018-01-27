@@ -63,7 +63,7 @@ namespace asn.Runtime.Core
         public int Read(int Address)
         {
             if (Address < 0 || Address > 1024)
-                throw new VMException(VMFault.InvalidAddr);
+                throw new VMException(VMFault.InvalidAddr, $"无效的内存地址：{Address}");
             return memoryPool[Address];
         }
 
@@ -76,9 +76,9 @@ namespace asn.Runtime.Core
         public void Write(int Address, int Value, MemoryAttribute Attr = MemoryAttribute.DATA)
         {
             if (Address < 0 || Address > 1024)
-                throw new VMException(VMFault.InvalidAddr);
+                throw new VMException(VMFault.InvalidAddr, $"无效的内存地址：{Address}");
             if (memoryAttribute[Address] != MemoryAttribute.DATA)
-                throw new VMException(VMFault.ReadOnly);
+                throw new VMException(VMFault.ReadOnly, $"内存地址禁止访问：{Address}");
             memoryPool[Address] = Value;
             memoryAttribute[Address] = Attr;
             if (Attr == MemoryAttribute.CODE)
@@ -93,9 +93,9 @@ namespace asn.Runtime.Core
         public OperatorLine ReadOperator(int Address)
         {
             if (Address < 0 || Address > 1024)
-                throw new VMException(VMFault.InvalidAddr);
+                throw new VMException(VMFault.InvalidAddr, $"无效的内存地址：{Address}");
             if (memoryAttribute[Address] != MemoryAttribute.CODE)
-                throw new VMException(VMFault.InvalidAddr);
+                throw new VMException(VMFault.InvalidAddr, $"访问冲突，该地址不是代码地址：{Address}");
 
             OperatorLine opt = new OperatorLine();
             opt.opt = memoryPool[Address];

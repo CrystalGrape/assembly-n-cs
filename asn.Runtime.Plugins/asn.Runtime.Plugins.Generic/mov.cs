@@ -13,7 +13,7 @@ namespace asn.Runtime.Plugins.Generic
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
         {
             if (types[0] != 0)
-                throw new VMException(VMFault.InvalidArgs);
+                throw new VMException(VMFault.InvalidArgs, $"mov，参数错误");
             int opdata;
             if (types[1] == 0)
                 opdata = Runtime.Read(args[1]);

@@ -112,13 +112,20 @@ namespace asn.Tool
                 Console.ForegroundColor = ConsoleColor.White;
                 if (cmd.StartsWith("run"))
                 {
-                    codes = new List<string>();
-                    compiler = new Compiler(optLoader, dummyInsCompiler);
-                    vm = new VirtualMachine(optLoader);
-                    string arg = cmd.Split(' ')[1];
-                    compiler.LoadModule(codes, $"{currentDir.FullName}\\{arg}");
-                    vm.Programing(compiler.Compile(codes));
-                    vm.Run();
+                    try
+                    {
+                        codes = new List<string>();
+                        compiler = new Compiler(optLoader, dummyInsCompiler);
+                        vm = new VirtualMachine(optLoader);
+                        string arg = cmd.Split(' ')[1];
+                        compiler.LoadModule(codes, $"{currentDir.FullName}\\{arg}");
+                        vm.Programing(compiler.Compile(codes));
+                        vm.Run();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
                 if(cmd.StartsWith("pwd"))
                     Console.WriteLine(currentDir.FullName);

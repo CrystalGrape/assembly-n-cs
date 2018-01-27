@@ -12,7 +12,7 @@ namespace asn.Runtime.Plugins.Generic
     {
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
         {
-            throw new VMException(VMFault.NormalExit);
+            throw new VMException(VMFault.NormalExit, "正常退出");
         }
     }
 }

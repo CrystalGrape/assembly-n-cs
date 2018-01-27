@@ -11,7 +11,7 @@ namespace asn.Runtime.Core
 {
     public class VirtualMachine : IVirtualMachine
     {
-        public const string vmVersion = "V0.0.2";
+        public const string vmVersion = "V0.1.1";
         /// <summary>
         /// 内存
         /// </summary>
@@ -120,13 +120,10 @@ namespace asn.Runtime.Core
                 }
                 catch(VMException e)
                 {
-                    if (e.InternelException == VMFault.NormalExit)
+                    if (e.VMFaultException == VMFault.NormalExit)
                         break;
                     else
-                    {
-                        Console.WriteLine($"{e.InnerException.ToString()}:{e.Message}");
-                        break;
-                    }
+                        throw e;
                 }
             }
         }
@@ -154,7 +151,7 @@ namespace asn.Runtime.Core
                 }
                 catch (VMException e)
                 {
-                    if (e.InternelException == VMFault.NormalExit)
+                    if (e.VMFaultException == VMFault.NormalExit)
                         break;
                     throw e;
                 }

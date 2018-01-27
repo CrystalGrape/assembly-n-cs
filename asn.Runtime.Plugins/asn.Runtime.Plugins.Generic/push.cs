@@ -13,7 +13,7 @@ namespace asn.Runtime.Plugins.Generic
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
         {
             if (types[0] != 0)
-                throw new VMException(VMFault.InvalidArgs);
+                throw new VMException(VMFault.InvalidArgs, $"push，参数错误");
             int value = Runtime.Read(args[0]);
             Runtime.Write(Runtime.sp++, value);
         }

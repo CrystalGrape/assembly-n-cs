@@ -13,15 +13,21 @@ namespace asn.Runtime.Plugins.Generic
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
         {
             if (types[0] != 0)
-                throw new VMException(VMFault.InvalidArgs);
+                throw new VMException(VMFault.InvalidArgs, $"strb，参数错误");
             int data = Runtime.Read(args[0]);
-            int address = Runtime.Read(args[1]);
-            int oringnal= Runtime.Read(address);
-            int shift = 0;
+
+            int address = args[1];
+            if (types[1] == 0)
+                address = Runtime.Read(args[1]);
+
+            int offset = args[2];
             if (types[2] == 0)
-                shift = Runtime.Read(args[2]);
-            else
-                shift = args[2];
+                offset = Runtime.Read(args[2]);
+
+            address += offset / 4;
+            int oringnal = Runtime.Read(address);
+            int shift = offset % 4;
+
             int tmp = ~(0x000000ff << (shift * 8));
             oringnal &= tmp;
             data = data << (shift * 8);

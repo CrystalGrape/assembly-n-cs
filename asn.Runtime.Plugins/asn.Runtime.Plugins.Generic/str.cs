@@ -13,13 +13,16 @@ namespace asn.Runtime.Plugins.Generic
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
         {
             if (types[0] != 0)
-                throw new VMException(VMFault.InvalidArgs);
-            int memoryAddr;
+                throw new VMException(VMFault.InvalidArgs, $"str，参数错误");
+            int memoryAddr = args[1];
             if (types[1] == 0)
                 memoryAddr = Runtime.Read(args[1]);
-            else
-                memoryAddr = args[1];
-            Runtime.Write(memoryAddr, Runtime.Read(args[0]));
+
+            int offset = args[2];
+            if (types[2] == 0)
+                offset = Runtime.Read(args[2]);
+
+            Runtime.Write(memoryAddr + offset, Runtime.Read(args[0]));
         }
     }
 }

@@ -18,13 +18,17 @@ namespace asn.Runtime.Interface.Common
     }
     public class VMException : Exception
     {
-        public VMFault InternelException;
+        public VMFault VMFaultException { get; private set; }
         private string message;
         public override string Message => message;
         public VMException(VMFault fault, string message = "")
         {
-            InternelException = fault;
+            VMFaultException = fault;
             this.message = message;
+        }
+        public override string ToString()
+        {
+            return $"{VMFaultException}:{Message}";
         }
     }
 }
