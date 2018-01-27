@@ -1,0 +1,67 @@
+jmp main
+jmp int
+section main:
+	mov r0,1
+	;task1 stack
+	mov r2,100
+	;task2 stack
+	mov r3,200
+	;init task2
+	mov sp,r3
+	mov r4,task2
+	push r4
+	push r5
+	push r5
+	push r5
+	push r5
+	mov r3,sp
+	;init task1
+	mov sp,r2
+	mov icon,1
+section task1:
+	show 1
+	;bjmp delay
+	jmp task1
+section task2:
+	show 2
+	;bjmp delay
+	jmp task2
+section delay:
+	push lr
+	mov r5,0
+	mov r6,1
+	mov r7,10
+section loopdelay:
+	halt
+	add r5,r5,r6
+	lt r5,r7
+	cjmp loopdelay
+	mov r5,0
+	pop lr
+	ret
+section int:
+	;save return address
+	push lr
+	push cpsr
+	push r5
+	push r6
+	push r7
+	mov r1,0
+	equ r0,r1
+	cjmp jmptask1
+	mov r2,sp
+	mov sp,r3
+	mov r0,0
+	jmp quitint
+section jmptask1:
+	mov r3,sp
+	mov sp,r2
+	mov r0,1
+section quitint:
+	pop r7
+	pop r6
+	pop r5
+	pop cpsr
+	pop lr
+	mov icon,1
+	ret
