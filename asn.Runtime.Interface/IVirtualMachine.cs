@@ -14,6 +14,7 @@ namespace asn.Runtime.Interface
         int cpsr { get; set; }
         int debug { get; set; }
         int icon { get; set; }
+        int VirtualMachineId { get; }
         int Read(int Address);
         void Write(int Address, int Value, MemoryAttribute Attr = MemoryAttribute.DATA);
         IVirtualMachine CopyVM();

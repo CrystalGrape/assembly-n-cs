@@ -11,7 +11,9 @@ namespace asn.Runtime.Core
 {
     public class VirtualMachine : IVirtualMachine
     {
-        public const string vmVersion = "V0.1.1";
+        public const string vmVersion = "V0.1.2";
+        private static int virtualMachineIdIndex = 0;
+        public int VirtualMachineId { get; private set; } 
         /// <summary>
         /// 内存
         /// </summary>
@@ -37,6 +39,7 @@ namespace asn.Runtime.Core
             this.optLoader = optLoader;
             optLoader.SetRuntime(this);
             Memory = new Memory();
+            VirtualMachineId = virtualMachineIdIndex++;
         }
         public VirtualMachine(VirtualMachine vm)
         {
@@ -46,6 +49,7 @@ namespace asn.Runtime.Core
             Memory = new Memory(vm.Memory);
             for (int i = 0; i < 16; i++)
                 Register[i] = vm.Register[i];
+            VirtualMachineId = virtualMachineIdIndex++;
         }
 
         public int Read(int Address)

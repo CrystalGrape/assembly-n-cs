@@ -60,7 +60,7 @@ namespace asn.Tool
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"assembly-n virtual machine[{VirtualMachine.vmVersion}]");
+            Console.WriteLine($"assembly-n virtual machine {VirtualMachine.vmVersion}");
             Console.WriteLine($"(c) 2017 Jay Ni。保留所有权利。");
             DirectoryInfo currentDir = new DirectoryInfo(Environment.CurrentDirectory);
             //加载伪指令插件
