@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.Runtime.Plugins.Domain"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asn.DummyInstructions.Plugins", "asn.DummyInstructions.Plugins", "{7DE0E3F2-CEC0-44FB-AF70-9612712AF23E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.DummyInstructions.Plugins.Generic", "asn.DummyInstructions.Plugins\asn.DummyInstructions.Plugins.di_strstring\asn.DummyInstructions.Plugins.Generic.csproj", "{0745308D-BA8A-40B3-9560-4A8DE6932016}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.DummyInstructions.Plugins.Generic", "asn.DummyInstructions.Plugins\asn.DummyInstructions.Plugins.Generic\asn.DummyInstructions.Plugins.Generic.csproj", "{0745308D-BA8A-40B3-9560-4A8DE6932016}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
