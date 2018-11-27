@@ -59,9 +59,8 @@ namespace asn.Tool
         }
         static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"assembly-n virtual machine {VirtualMachine.vmVersion}");
-            Console.WriteLine($"(c) 2017 Jay Ni。保留所有权利。");
+            Console.WriteLine($"(C) 2017 Jay Ni。保留所有权利。\r\n");
             DirectoryInfo currentDir = new DirectoryInfo(Environment.CurrentDirectory);
             //加载伪指令插件
             DummyInsCompiler dummyInsCompiler = new DummyInsCompiler();
@@ -72,10 +71,10 @@ namespace asn.Tool
             List<string> codes;
             Compiler compiler;
             VirtualMachine vm;
-
+            ConsoleColor DefaultColor = Console.ForegroundColor;
             while (true)
             {
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = DefaultColor;
                 Console.Write("asn>:");
                 string cmd = Console.ReadLine();
                 cmd = cmd.Trim(new char[] { '\n', ' ' });
@@ -86,8 +85,13 @@ namespace asn.Tool
                     {
                         if (x is DirectoryInfo)
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.ForegroundColor = ConsoleColor.Blue;
                             Console.WriteLine($"<dir>   {x.Name}");
+                        }
+                        else if (x.FullName.ToLower().EndsWith(".asn"))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"<exe>  {x.Name}");
                         }
                         else
                         {
@@ -109,7 +113,7 @@ namespace asn.Tool
                     else
                         currentDir = tmpDir;
                 }
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = DefaultColor;
                 if (cmd.StartsWith("run"))
                 {
                     try
