@@ -26,16 +26,36 @@ namespace asn.Runtime.Core
         }
         private Dictionary<string, int> OperatorMap = new Dictionary<string, int>();
         private Dictionary<int, IOperator> RunMap = new Dictionary<int, IOperator>();
+        /// <summary>
+        /// 加载指令集
+        /// </summary>
+        /// <param name="pluginsDir"></param>
         public void Load(string pluginsDir)
         {
+            int pluginIndex = 0;
+            //加载基础指令集类型
+            Assembly basicAssembly = Assembly.GetExecutingAssembly();
+            List<Type> basicTypes = basicAssembly
+                .GetTypes()
+                .Where(p => typeof(IOperator).IsAssignableFrom(p) && !p.IsInterface && p.IsClass && !p.IsAbstract)
+                .ToList();
+            foreach (Type t in basicTypes)
+            {
+                IOperator plugin = (IOperator)basicAssembly.CreateInstance(t.FullName);
+                OperatorMap.Add(t.Name, pluginIndex);
+                RunMap.Add(pluginIndex, plugin);
+                pluginIndex++;
+            }
+            //加载自定义指令集
             DirectoryInfo pluginsDirInfo = new DirectoryInfo(pluginsDir);
             List<FileInfo> pluginList = pluginsDirInfo.GetFiles("*.dll").ToList();
-            int pluginIndex = 0;
             pluginList.ForEach(x =>
             {
                 Assembly assembly = Assembly.LoadFile(x.FullName);
-                Type[] types = assembly.GetTypes();
-                List<Type> pluginTypes = types.Where(p => typeof(IOperator).IsAssignableFrom(p) && !p.IsInterface && p.IsClass && !p.IsAbstract).ToList();
+                List<Type> pluginTypes = assembly
+                    .GetTypes()
+                    .Where(p => typeof(IOperator).IsAssignableFrom(p) && !p.IsInterface && p.IsClass && !p.IsAbstract)
+                    .ToList();
                 foreach (Type t in pluginTypes)
                 {
                     IOperator plugin = (IOperator)assembly.CreateInstance(t.FullName);
@@ -45,6 +65,7 @@ namespace asn.Runtime.Core
                 }
             });
         }
+
 
         private IVirtualMachine Runtime = null;
         /// <summary>
