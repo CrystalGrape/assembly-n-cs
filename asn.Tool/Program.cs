@@ -29,32 +29,32 @@ namespace asn.Tool
             Console.Write("┤");
             Console.WriteLine();
             optLoader.ForEach((kv, isEnd) =>
-             {
-                 if (isEnd)
-                 {
-                     Console.Write("│");
-                     Console.Write($"{string.Format("{0:D4}", kv.Value)}");
-                     Console.Write("│");
-                     Console.Write($"{kv.Key.PadLeft(4, ' ')}│");
-                     Console.WriteLine();
-                     Console.Write("└");
-                     Console.Write("──┴──");
-                     Console.Write("┘");
-                     Console.WriteLine();
-                 }
-                 else
-                 {
-                     Console.Write("│");
-                     Console.Write($"{string.Format("{0:D4}", kv.Value)}");
-                     Console.Write("│");
-                     Console.Write($"{kv.Key.PadLeft(4, ' ')}│");
-                     Console.WriteLine();
-                     Console.Write("├");
-                     Console.Write("──┼──");
-                     Console.Write("┤");
-                     Console.WriteLine();
-                 }
-             });
+            {
+                if (isEnd)
+                {
+                    Console.Write("│");
+                    Console.Write($"{string.Format("{0:D4}", kv.Value)}");
+                    Console.Write("│");
+                    Console.Write($"{kv.Key.PadLeft(4, ' ')}│");
+                    Console.WriteLine();
+                    Console.Write("└");
+                    Console.Write("──┴──");
+                    Console.Write("┘");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Write("│");
+                    Console.Write($"{string.Format("{0:D4}", kv.Value)}");
+                    Console.Write("│");
+                    Console.Write($"{kv.Key.PadLeft(4, ' ')}│");
+                    Console.WriteLine();
+                    Console.Write("├");
+                    Console.Write("──┼──");
+                    Console.Write("┤");
+                    Console.WriteLine();
+                }
+            });
             Console.ForegroundColor = ConsoleColor.White;
         }
         static void Main(string[] args)
@@ -131,11 +131,11 @@ namespace asn.Tool
                         Console.WriteLine(e.ToString());
                     }
                 }
-                if(cmd.StartsWith("pwd"))
+                if (cmd.StartsWith("pwd"))
                     Console.WriteLine(currentDir.FullName);
                 if (cmd.StartsWith("quit"))
                     break;
-                if(cmd.StartsWith("show opt"))
+                if (cmd.StartsWith("show opt"))
                     PrintOperators(optLoader);
             }
         }
