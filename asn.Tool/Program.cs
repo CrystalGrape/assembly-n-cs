@@ -118,13 +118,56 @@ namespace asn.Tool
                 {
                     try
                     {
+                        string arg = cmd.Split(' ')[1];
+                        if (arg.EndsWith(".abin"))
+                        {
+                            vm = new VirtualMachine(optLoader);
+                            string binfile = Path.Combine(currentDir.FullName, arg);
+                            using(FileStream fs = File.Open(binfile, FileMode.Open))
+                            {
+                                vm.Burn(fs);
+                            }
+                            vm.Run();
+                        }
+                        else
+                        {
+                            codes = new List<string>();
+                            compiler = new Compiler(optLoader, dummyInsCompiler);
+                            vm = new VirtualMachine(optLoader);
+                            compiler.LoadModule(codes, arg, currentDir.FullName);
+                            vm.Programing(compiler.Compile(codes));
+                            vm.Run();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
+                }
+                if (cmd.StartsWith("compile"))
+                {
+                    try
+                    {
                         codes = new List<string>();
                         compiler = new Compiler(optLoader, dummyInsCompiler);
                         vm = new VirtualMachine(optLoader);
-                        string arg = cmd.Split(' ')[1];
+                        var parameters = cmd.Split(' ');
+                        string arg = parameters[1];
+                        string dest = "out.abin";
+                        if (parameters.Length == 3)
+                        {
+                            dest = parameters[2];
+                        }
+                        
                         compiler.LoadModule(codes, arg, currentDir.FullName);
                         vm.Programing(compiler.Compile(codes));
-                        vm.Run();
+                        string destFile = Path.Combine(currentDir.FullName, dest);
+                        if (File.Exists(destFile))
+                            File.Delete(destFile);
+                        using(FileStream fs = File.Open(destFile, FileMode.CreateNew))
+                        {
+                            vm.Dump(fs);
+                        }
                     }
                     catch (Exception e)
                     {

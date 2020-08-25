@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace asn.Runtime.Interface.Common
 {
-    public enum MemoryAttribute
+    public enum MemoryAttribute : int
     {
         /// <summary>
         /// 代码

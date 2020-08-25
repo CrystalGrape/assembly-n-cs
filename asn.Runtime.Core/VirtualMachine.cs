@@ -18,19 +18,16 @@ namespace asn.Runtime.Core
         /// 内存
         /// </summary>
         private Memory Memory;
-        /// <summary>
-        /// 偏移地址，由于低地址内存用于存储指令集，所以访问时必须偏移一个地址
-        /// </summary>
-        private int offsetAddress = 0;
         #region 寄存器定义
         public const int RegisterBaseAddr = 0x56000000;
-        private int[] Register = new int[16];
+        private int[] Register = new int[17];
         public int pc { get { return Register[10]; } set { Register[10] = value; } }
         public int lr { get { return Register[11]; } set { Register[11] = value; } }
         public int sp { get { return Register[12]; } set { Register[12] = value; } }
         public int cpsr { get { return Register[13]; } set { Register[13] = value; } }
         public int debug { get { return Register[14]; } set { Register[14] = value; } }
         public int icon { get { return Register[15]; } set { Register[15] = value; } }
+        public int offset { get { return Register[16]; } set { Register[16] = value; } }  //偏移地址，由于低地址内存用于存储指令集，所以访问时必须偏移一个地址
         #endregion
 
         private Plugins optLoader = null;
@@ -45,9 +42,9 @@ namespace asn.Runtime.Core
         {
             this.optLoader = new Plugins(vm.optLoader);
             optLoader.SetRuntime(this);
-            this.offsetAddress = vm.offsetAddress;
+            this.offset = vm.offset;
             Memory = new Memory(vm.Memory);
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 17; i++)
                 Register[i] = vm.Register[i];
             VirtualMachineId = virtualMachineIdIndex++;
         }
@@ -58,7 +55,7 @@ namespace asn.Runtime.Core
                 return Register[Address - RegisterBaseAddr];
             else
             {
-                Address += offsetAddress;
+                Address += offset;
                 return Memory.Read(Address);
             }
         }
@@ -68,7 +65,7 @@ namespace asn.Runtime.Core
                 Register[Address - RegisterBaseAddr] = Value;
             else
             {
-                Address += offsetAddress;
+                Address += offset;
                 Memory.Write(Address, Value, Attr);
             }
         }
@@ -95,8 +92,8 @@ namespace asn.Runtime.Core
                 }
                 Write(BaseAddress + Codes.Count + i * 4 + 3, data, MemoryAttribute.PARAM);
             }
-            offsetAddress = Codes.Count * 5; ;
-            sp = offsetAddress;            
+            offset = Codes.Count * 5; ;
+            sp = offset;            
         }
 
         private int operatorCount = 0;
@@ -170,6 +167,36 @@ namespace asn.Runtime.Core
         {
             VirtualMachine vm = new VirtualMachine(this);
             return vm;
+        }
+
+        /// <summary>
+        /// 转储虚拟机
+        /// </summary>
+        /// <param name="stream"></param>
+        public void Dump(Stream stream)
+        {
+            //转储寄存器
+            for(var i = 0; i < 17; i++)
+            {
+                byte[] registerBytes = BitConverter.GetBytes(Register[i]);
+                stream.Write(registerBytes, 0, registerBytes.Length);
+            }
+            //转储内存
+            Memory.Dump(stream);
+            stream.Flush();
+        }
+
+        public void Burn(Stream stream)
+        {
+            //转储寄存器
+            for (var i = 0; i < 17; i++)
+            {
+                byte[] registerBytes = new byte[4];
+                stream.Read(registerBytes, 0, 4);
+                Register[i] = BitConverter.ToInt32(registerBytes, 0);
+            }
+            //转储内存
+            Memory.Burn(stream);
         }
     }
 }

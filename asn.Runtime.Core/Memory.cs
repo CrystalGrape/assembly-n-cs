@@ -3,6 +3,7 @@ using asn.Runtime.Interface;
 using asn.Runtime.Interface.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -108,6 +109,61 @@ namespace asn.Runtime.Core
             opt.argTypes[1] = (char)(dataType & 0x02);
             opt.argTypes[0] = (char)(dataType & 0x01);
             return opt;
+        }
+
+
+        public void Dump(Stream stream)
+        {
+            //写入内存大小
+            byte[] memorySizeBytes = BitConverter.GetBytes(memorySize);
+            stream.Write(memorySizeBytes, 0, memorySizeBytes.Length);
+            //写入参数基地址
+            byte[] paramBaseAddressBytes = BitConverter.GetBytes(ParamBaseAddress);
+            stream.Write(paramBaseAddressBytes, 0, paramBaseAddressBytes.Length);
+            //写入内存属性
+            for (var i = 0; i < memorySize; i++)
+            {
+                byte[] blockBytes = BitConverter.GetBytes((int)memoryAttribute[i]);
+                stream.Write(blockBytes, 0, blockBytes.Length);
+            }
+            //写入内存数据
+            for (var i = 0; i < memorySize; i++)
+            {
+                byte[] blockBytes = BitConverter.GetBytes(memoryPool[i]);
+                stream.Write(blockBytes, 0, blockBytes.Length);
+            }
+        }
+
+        public void Burn(Stream stream)
+        {
+            //读取内存大小
+            byte[] memorySizeBytes = new byte[4];
+            stream.Read(memorySizeBytes, 0, 4);
+            memorySize = BitConverter.ToInt32(memorySizeBytes, 0);
+
+            memoryPool = new int[memorySize];
+            memoryAttribute = new MemoryAttribute[memorySize];
+
+            //读取参数基地址
+            byte[] paramBaseAddressBytes = new byte[4];
+            stream.Read(paramBaseAddressBytes, 0, 4);
+            ParamBaseAddress = BitConverter.ToInt32(paramBaseAddressBytes, 0);
+
+            //读取内存属性
+            for (var i = 0; i < memorySize; i++)
+            {
+                byte[] blockBytes = new byte[4];
+                stream.Read(blockBytes, 0, 4);
+                memoryAttribute[i] = (MemoryAttribute)BitConverter.ToInt32(blockBytes, 0);
+            }
+
+            //读取内存数据
+            for (var i = 0; i < memorySize; i++)
+            {
+                byte[] blockBytes = new byte[4];
+                stream.Read(blockBytes, 0, 4);
+                memoryPool[i] = BitConverter.ToInt32(blockBytes, 0);
+            }
         }
     }
 }
