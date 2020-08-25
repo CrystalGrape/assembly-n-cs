@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.Runtime.Core", "asn.Runtime.Core\asn.Runtime.Core.csproj", "{8A52204A-B0BD-4CC3-A720-90772FEF93A6}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asn.DummyInstructions.Plugins", "asn.DummyInstructions.Plugins", "{7DE0E3F2-CEC0-44FB-AF70-9612712AF23E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.DummyInstructions.Plugins.Generic", "asn.DummyInstructions.Plugins\asn.DummyInstructions.Plugins.Generic\asn.DummyInstructions.Plugins.Generic.csproj", "{0745308D-BA8A-40B3-9560-4A8DE6932016}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn.Ide", "asn.Ide\asn.Ide.csproj", "{CDCD061E-342D-4F08-8C17-011FDDC6004C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{0745308D-BA8A-40B3-9560-4A8DE6932016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0745308D-BA8A-40B3-9560-4A8DE6932016}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0745308D-BA8A-40B3-9560-4A8DE6932016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDCD061E-342D-4F08-8C17-011FDDC6004C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDCD061E-342D-4F08-8C17-011FDDC6004C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDCD061E-342D-4F08-8C17-011FDDC6004C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDCD061E-342D-4F08-8C17-011FDDC6004C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
