@@ -90,8 +90,13 @@ namespace asn.Tool
                         }
                         else if (x.FullName.ToLower().EndsWith(".asn"))
                         {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.WriteLine($"<assemblyn>  {x.Name}");
+                        }
+                        else if (x.FullName.ToLower().EndsWith(".abin"))
+                        {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"<exe>  {x.Name}");
+                            Console.WriteLine($"<binary>  {x.Name}");
                         }
                         else
                         {

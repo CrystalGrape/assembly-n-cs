@@ -2,3 +2,4 @@ mov r0,0
 di_strstring r0,"Hello assembly-n"
 showstring 0
 end
+    

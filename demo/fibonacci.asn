@@ -10,13 +10,15 @@ section fibnacci:
     ;取出参数
     pop r0
     pop r1
+    push lr
     add r0,r0,r1
     show r0
+    mov r3,5000
+    gt r0,r3
+    cjmp return
     push r0
     push r1
-    mov r1,5000
-    gt r0,r1
-    cjmp return
     bjmp fibnacci
 section return:
+    pop lr
     ret

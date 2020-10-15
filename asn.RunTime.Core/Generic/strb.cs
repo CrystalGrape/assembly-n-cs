@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace asn.Runtime.Plugins.Generic
 {
+    /// <summary>
+    /// 存储一个byte到内存
+    /// 参数1：数据（寄存器）
+    /// 参数2：目的地址
+    /// 参数3：偏移量（相对目的地址的偏移量）
+    /// </summary>
     public class strb : IOperator
     {
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)

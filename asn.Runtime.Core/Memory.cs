@@ -17,7 +17,7 @@ namespace asn.Runtime.Core
         private int[] memoryPool;
         private int memorySize;
         private MemoryAttribute[] memoryAttribute;
-        private int ParamBaseAddress = 0;
+        private int ParamBaseAddress = 0;   //指令参数存放的起始位置
         /// <summary>
         /// 内存大小，每个内存占据32位（4byte）
         /// </summary>

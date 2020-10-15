@@ -58,7 +58,8 @@ namespace asn.DummyInstructions.Plugins.Generic
             List<string> resultLines = new List<string>();
             if (Args[0].StartsWith("r"))
             {
-                int i = 0;
+                resultLines.Add("push debug");
+                int i;
                 for (i = 0; i < Args[1].Length; i++)
                 {
                     resultLines.Add($"mov debug,{(int)Args[1][i]}");
@@ -66,6 +67,7 @@ namespace asn.DummyInstructions.Plugins.Generic
                 }
                 resultLines.Add($"mov debug,0");
                 resultLines.Add($"strb debug,{Args[0]},{i}");
+                resultLines.Add("pop debug");
             }
             else
                 throw new VMException(VMFault.InvalidArgs, "伪指令di_strstring，参数1必须为寄存器");

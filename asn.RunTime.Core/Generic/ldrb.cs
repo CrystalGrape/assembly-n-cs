@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace asn.Runtime.Plugins.Generic
 {
+    /// <summary>
+    /// 加载一个byte到寄存器
+    /// 参数1：目的寄存器
+    /// 参数2：来源地址
+    /// 参数3：偏移量（相对来源地址的偏移量）
+    /// </summary>
     public class ldrb : IOperator
     {
         public void Run(IVirtualMachine Runtime, int[] args, char[] types)
